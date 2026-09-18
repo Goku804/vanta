@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.vanta.app.data.model.Song
 import com.vanta.app.di.AppContainer
 import com.vanta.app.ui.VantaViewModelFactory
@@ -39,7 +41,10 @@ import com.vanta.app.ui.player.PlayerViewModel
 import com.vanta.app.ui.playlists.PlaylistsScreen
 import com.vanta.app.ui.playlists.PlaylistsViewModel
 import com.vanta.app.ui.settings.SettingsScreen
-import com.vanta.app.ui.videos.VideosScreen
+import com.vanta.app.ui.video.VideoPlayerScreen
+import com.vanta.app.ui.video.VideoPlayerViewModel
+import com.vanta.app.ui.videos.VideoLibraryScreen
+import com.vanta.app.ui.videos.VideoLibraryViewModel
 
 @Composable
 fun VantaNavHost(container: AppContainer) {
@@ -52,6 +57,8 @@ fun VantaNavHost(container: AppContainer) {
     val playerViewModel: PlayerViewModel = viewModel(factory = factory)
     val morningViewModel: MorningViewModel = viewModel(factory = factory)
     val playlistsViewModel: PlaylistsViewModel = viewModel(factory = factory)
+    val videoLibraryViewModel: VideoLibraryViewModel = viewModel(factory = factory)
+    val videoPlayerViewModel: VideoPlayerViewModel = viewModel(factory = factory)
 
     val playbackState by playerViewModel.playbackState.collectAsState()
 
@@ -111,7 +118,23 @@ fun VantaNavHost(container: AppContainer) {
                     PlaylistsScreen(viewModel = playlistsViewModel)
                 }
                 composable(VantaRoutes.VIDEOS) {
-                    VideosScreen()
+                    VideoLibraryScreen(
+                        viewModel = videoLibraryViewModel,
+                        onVideoClick = { video ->
+                            navController.navigate(VantaRoutes.videoPlayer(video.id))
+                        }
+                    )
+                }
+                composable(
+                    route = VantaRoutes.VIDEO_PLAYER,
+                    arguments = listOf(navArgument("videoId") { type = NavType.LongType })
+                ) { backStackEntry ->
+                    val videoId = backStackEntry.arguments?.getLong("videoId") ?: return@composable
+                    VideoPlayerScreen(
+                        videoId = videoId,
+                        viewModel = videoPlayerViewModel,
+                        onBack = { navController.popBackStack() }
+                    )
                 }
                 composable(VantaRoutes.FILES) {
                     FilesScreen()

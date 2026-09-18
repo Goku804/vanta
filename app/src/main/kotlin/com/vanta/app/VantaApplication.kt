@@ -4,6 +4,9 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import coil.Coil
+import coil.ImageLoader
+import coil.decode.VideoFrameDecoder
 import com.vanta.app.di.AppContainer
 
 class VantaApplication : Application() {
@@ -16,6 +19,17 @@ class VantaApplication : Application() {
         container = AppContainer(this)
         container.playbackManager.connect()
         createNotificationChannel()
+        setUpImageLoader()
+    }
+
+    /** Lets Coil decode a video's first frame directly as its thumbnail
+     * (used by the video library grid) without a separate thumbnail file. */
+    private fun setUpImageLoader() {
+        Coil.setImageLoader(
+            ImageLoader.Builder(this)
+                .components { add(VideoFrameDecoder.Factory()) }
+                .build()
+        )
     }
 
     private fun createNotificationChannel() {

@@ -34,9 +34,11 @@ object VantaRoutes {
     const val PLAYLISTS = "playlists"
     const val PLAYLIST_DETAIL = "playlist/{playlistId}"
     const val VIDEOS = "videos"
+    const val VIDEO_PLAYER = "video/{videoId}"
     const val FILES = "files"
     const val SETTINGS = "settings"
     const val PLAYER = "player"
 
     fun playlistDetail(playlistId: Long) = "playlist/$playlistId"
+    fun videoPlayer(videoId: Long) = "video/$videoId"
 }

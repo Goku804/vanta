@@ -87,12 +87,17 @@ dependencies {
     implementation("androidx.media3:media3-session:1.4.1")
     implementation("androidx.media3:media3-ui:1.4.1")
     implementation("androidx.media3:media3-common:1.4.1")
+    // Video-to-audio conversion (Phase 6)
+    implementation("androidx.media3:media3-transformer:1.4.1")
+    implementation("androidx.media3:media3-effect:1.4.1")
 
     // WorkManager (morning scheduling fallback / rescheduling)
     implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     // Image loading for artwork / thumbnails (content:// and file:// URIs)
     implementation("io.coil-kt:coil-compose:2.6.0")
+    // Decodes the first frame of a video as a thumbnail (Phase 5 video library)
+    implementation("io.coil-kt:coil-video:2.6.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

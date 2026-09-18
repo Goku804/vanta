@@ -53,3 +53,20 @@ data class MorningConfigEntity(
     val playbackMode: String,
     val songIdsCsv: String
 )
+
+/**
+ * Cached metadata for a video discovered in MediaStore. Same upsert/prune
+ * pattern as [SongEntity] so a re-scan stays cheap and stays in sync with
+ * what's actually still on disk.
+ */
+@Entity(tableName = "videos")
+data class VideoEntity(
+    @PrimaryKey val id: Long,
+    val mediaStoreUri: String,
+    val title: String,
+    val durationMs: Long,
+    val sizeBytes: Long,
+    val width: Int,
+    val height: Int,
+    val dateAddedMs: Long
+)

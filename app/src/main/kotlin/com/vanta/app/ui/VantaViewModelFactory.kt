@@ -31,6 +31,16 @@ class VantaViewModelFactory(private val container: AppContainer) : ViewModelProv
             PlaylistsViewModel::class.java ->
                 PlaylistsViewModel(container.musicRepository) as T
 
+            com.vanta.app.ui.videos.VideoLibraryViewModel::class.java ->
+                com.vanta.app.ui.videos.VideoLibraryViewModel(container.videoRepository) as T
+
+            com.vanta.app.ui.video.VideoPlayerViewModel::class.java ->
+                com.vanta.app.ui.video.VideoPlayerViewModel(
+                    container.videoRepository,
+                    container.musicRepository,
+                    container.videoAudioConverter
+                ) as T
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }

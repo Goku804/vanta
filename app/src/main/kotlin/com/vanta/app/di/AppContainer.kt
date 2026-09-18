@@ -1,9 +1,11 @@
 package com.vanta.app.di
 
 import android.content.Context
+import com.vanta.app.conversion.VideoAudioConverter
 import com.vanta.app.data.db.VantaDatabase
 import com.vanta.app.data.repository.MorningRepository
 import com.vanta.app.data.repository.MusicRepository
+import com.vanta.app.data.repository.VideoRepository
 import com.vanta.app.morning.MorningScheduler
 import com.vanta.app.playback.PlaybackManager
 
@@ -22,6 +24,10 @@ class AppContainer(context: Context) {
         MusicRepository(appContext, database.songDao(), database.playlistDao())
     }
 
+    val videoRepository: VideoRepository by lazy {
+        VideoRepository(appContext, database.videoDao())
+    }
+
     val morningRepository: MorningRepository by lazy {
         MorningRepository(database.morningConfigDao())
     }
@@ -29,4 +35,6 @@ class AppContainer(context: Context) {
     val playbackManager: PlaybackManager by lazy { PlaybackManager(appContext) }
 
     val morningScheduler: MorningScheduler by lazy { MorningScheduler(appContext) }
+
+    val videoAudioConverter: VideoAudioConverter by lazy { VideoAudioConverter(appContext) }
 }
