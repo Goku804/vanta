@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Excludes the Room database from auto-backup: it is rebuilt from on-device
+     media metadata, so re-scanning is cheaper/safer than restoring a stale copy. -->
+<full-backup-content>
+    <exclude domain="database" path="vanta.db" />
+</full-backup-content>

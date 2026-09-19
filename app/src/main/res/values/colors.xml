@@ -1,0 +1,10 @@
+<resources>
+    <!-- Base palette; the live theme is defined in Kotlin (ui/theme/Color.kt)
+         so it can respond to dynamic/dark mode. These back XML-only
+         surfaces such as the notification icon tint and launcher icon. -->
+    <color name="vanta_void">#0A0B10</color>
+    <color name="vanta_ion">#5EE7FF</color>
+    <color name="vanta_signal">#B98CFF</color>
+    <color name="vanta_ember">#FF7A59</color>
+    <color name="vanta_mist">#C7CBE0</color>
+</resources>

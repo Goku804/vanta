@@ -1,0 +1,63 @@
+name: Build VANTA debug APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      # The repository ships gradlew / gradlew.bat and gradle-wrapper.properties,
+      # but not the gradle-wrapper.jar binary itself (it isn't something that can
+      # be generated as text). This step installs the exact Gradle version named
+      # in gradle/wrapper/gradle-wrapper.properties and uses it to generate that
+      # jar, so the wrapper becomes fully functional for this build and for
+      # anyone who later clones the pushed repo.
+      - name: Install Gradle and generate the wrapper jar
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Generate gradle-wrapper.jar
+        run: gradle wrapper --gradle-version 8.7
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Locate the generated APK
+        id: find_apk
+        run: |
+          APK_PATH=$(find app/build/outputs/apk/debug -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            echo "No APK found under app/build/outputs/apk/debug" >&2
+            exit 1
+          fi
+          echo "Found APK at $APK_PATH"
+          echo "apk_path=$APK_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vanta-debug-apk
+          path: ${{ steps.find_apk.outputs.apk_path }}
+          if-no-files-found: error
