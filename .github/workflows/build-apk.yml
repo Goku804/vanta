@@ -21,15 +21,6 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      # The repository ships gradlew / gradlew.bat and gradle-wrapper.properties,
-      # but not the gradle-wrapper.jar binary itself (it isn't something that can
-      # be generated as text). This step installs the exact Gradle version named
-      # in gradle/wrapper/gradle-wrapper.properties and uses it to generate that
-      # jar, so the wrapper becomes fully functional for this build and for
-      # anyone who later clones the pushed repo.
       - name: Install Gradle and generate the wrapper jar
         uses: gradle/actions/setup-gradle@v4
         with:
